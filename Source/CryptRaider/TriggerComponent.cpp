@@ -20,8 +20,11 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
     GetOverlappingActors(Actors);
 
-    if(Actors.Num() > 0)
+    for (AActor* Actor : Actors)
     {
-        UE_LOG(LogTemp, Display, TEXT("%s"), *Actors[0]->GetActorNameOrLabel());
+        if (Actor->ActorHasTag(UnlockTag))
+        {
+            UE_LOG(LogTemp, Display, TEXT("Unlocking"));
+        }
     }
 }
