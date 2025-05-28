@@ -3,16 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
-#include "Mover.generated.h"
+#include "Components/SceneComponent.h"
+#include "Grabber.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CRYPTRAIDER_API UMover : public UActorComponent
+class CRYPTRAIDER_API UGrabber : public USceneComponent
 {
 	GENERATED_BODY()
 
 public:	
-	UMover();
+	UGrabber();
 
 protected:
 	virtual void BeginPlay() override;
@@ -20,17 +20,16 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BluePrintCallable)
+	void Grab();
+
+	UFUNCTION(BluePrintCallable)
+	void Release();
+
 private:
-	UPROPERTY(EditAnywhere) 
-	FVector MoveOffset;
+	UPROPERTY(EditAnywhere)
+	float MaxGrabDistance = 400;
 
-	UPROPERTY(EditAnywhere) 
-	float MoveTime = 4;
-
-	UPROPERTY(EditAnywhere) 
-	bool ShouldMove = false;
-
-	FVector OriginalLocation;
-
-	FVector GetMoveDirection(float DeltaTime);
+	UPROPERTY(EditAnywhere)
+	float GrabRadius = 100;
 };
