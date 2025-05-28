@@ -24,6 +24,11 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 	}
 }
 
+void UMover::SetShouldMove(bool NewShouldMove)
+{
+	ShouldMove = NewShouldMove;
+}
+
 FVector UMover::GetMoveDirection(float DeltaTime)
 {
 	FVector CurrentLocation = GetOwner()->GetActorLocation();
