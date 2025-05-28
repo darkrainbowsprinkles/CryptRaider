@@ -48,7 +48,11 @@ void UGrabber::Grab()
 	if(GetGrabbableInReach(HitResult))
 	{
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
+
+		HitResult.GetActor()->Tags.Add("Grabbed");
+		HitResult.GetActor()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 10, FColor::Yellow, false, 5);
 
@@ -75,6 +79,7 @@ void UGrabber::Release()
 		return;
 	}
 
+	PhysicsHandle->GetGrabbedComponent()->GetOwner()->Tags.Remove("Grabbed");
 	PhysicsHandle->GetGrabbedComponent()->WakeAllRigidBodies();
 	PhysicsHandle->ReleaseComponent();
 }

@@ -32,6 +32,4 @@ private:
 	bool ShouldMove = false;
 
 	FVector OriginalLocation;
-
-	FVector GetMoveDirection(float DeltaTime);
 };
