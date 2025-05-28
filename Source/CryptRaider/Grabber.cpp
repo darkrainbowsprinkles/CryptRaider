@@ -52,8 +52,8 @@ void UGrabber::Grab()
 
 	if(HasHit)
 	{
-		FString HitName = HitResult.GetActor()->GetActorNameOrLabel();
-		UE_LOG(LogTemp, Display, TEXT("Hit Actor: %s"), *HitName);
+		DrawDebugSphere(GetWorld(), HitResult.Location, 10, 10, FColor::Blue, false, 5);
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 10, FColor::Yellow, false, 5);
 	}
 	else
 	{
