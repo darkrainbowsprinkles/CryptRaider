@@ -21,26 +21,27 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
         return;
     }
 
-    AActor* Other = GetAcceptableActor();
+    TArray<AActor*> Actors = GetAcceptableActors();
 
-    if(Other != nullptr)
-    {
-        UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Other->GetRootComponent());
-
-        if(Component != nullptr)
-        {   
-            Component->SetSimulatePhysics(false);
-        }
-
-        Other->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-        Mover->SetShouldMove(true);
-    }
-    else
+    if (Actors.Num() == 0)
     {
         Mover->SetShouldMove(false);
+        return;
     }
 
-
+    for (AActor* Actor : Actors)
+    {
+        if (Actor)
+        {
+            UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
+            if (Component)
+            {
+                Component->SetSimulatePhysics(false);
+            }
+            Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+        }
+    }
+    Mover->SetShouldMove(true);
 }
 
 void UTriggerComponent::SetMover(UMover *NewMover)
@@ -48,22 +49,49 @@ void UTriggerComponent::SetMover(UMover *NewMover)
     Mover = NewMover;
 }
 
-AActor* UTriggerComponent::GetAcceptableActor() const
+TArray<AActor*> UTriggerComponent::GetAcceptableActors() const
 {
-    TArray<AActor*> Actors;
+    TArray<AActor*> OverlappingActors;
+    GetOverlappingActors(OverlappingActors);
 
-    GetOverlappingActors(Actors);
-
-    for (AActor* Actor : Actors)
+    // Early out if counts don't match
+    if (OverlappingActors.Num() != AcceptableTags.Num())
     {
-        bool HasAcceptableTag = Actor->ActorHasTag(UnlockTag);
-        bool IsGrabbed = Actor->ActorHasTag("Grabbed");
+        return {};
+    }
 
-        if (HasAcceptableTag && !IsGrabbed)
+    TArray<AActor*> MatchedActors;
+    TArray<FName> TagsToMatch = AcceptableTags;
+
+    // For each actor, try to match a unique tag
+    for (AActor* Actor : OverlappingActors)
+    {
+        if (!Actor || Actor->ActorHasTag("Grabbed"))
         {
-            return Actor;
+            return {};
+        }
+
+        bool FoundTag = false;
+        for (int32 i = 0; i < TagsToMatch.Num(); ++i)
+        {
+            if (Actor->ActorHasTag(TagsToMatch[i]))
+            {
+                MatchedActors.Add(Actor);
+                TagsToMatch.RemoveAt(i);
+                FoundTag = true;
+                break;
+            }
+        }
+        if (!FoundTag)
+        {
+            return {};
         }
     }
 
-    return nullptr;
+    // If all tags matched, return actors
+    if (MatchedActors.Num() == AcceptableTags.Num())
+    {
+        return MatchedActors;
+    }
+    return {};
 }

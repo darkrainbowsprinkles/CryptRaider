@@ -26,9 +26,9 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	FName UnlockTag;
+	TArray<FName> AcceptableTags;
 
 	UMover* Mover;
 
-	AActor* GetAcceptableActor() const;
+	TArray<AActor*> GetAcceptableActors() const;
 };
