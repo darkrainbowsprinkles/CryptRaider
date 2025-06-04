@@ -14,6 +14,23 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 }
 
+bool UGrabber::HasGrabbedComponent()
+{
+	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
+
+	if(PhysicsHandle == nullptr)
+	{
+		return false;
+	}
+
+	if(PhysicsHandle->GetGrabbedComponent() == nullptr)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BluePrintCallable)
 	void Release();
 
+	UFUNCTION(BlueprintCallable)
+	bool HasGrabbedComponent();
+
 private:
 	UPROPERTY(EditAnywhere)
 	float MaxGrabDistance = 400;
