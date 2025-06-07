@@ -1,5 +1,6 @@
 
-![Crypt Raider](https://github.com/user-attachments/assets/68f287d0-8e26-47f0-928c-c2a78da25de3)
+![Crypt Raider (1)](https://github.com/user-attachments/assets/889960eb-483f-4e8f-9e5b-ce0f5a204f6a)
+
 
 Crypt Raider is a first-person adventure game set in a dark, medieval dungeon environment. Developed as a learning project in Unreal Engine 5, the game focuses on exploration, atmosphere, and immersive gameplay.
 This project emphasizes C++ programming within UE5, including custom player controls, interaction systems, and environmental design.
